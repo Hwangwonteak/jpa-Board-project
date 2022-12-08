@@ -18,13 +18,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Answer {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 	@Column(length = 1000)
 	private String content;
 	
 	private LocalDateTime createTime;
 	
-	@ManyToOne
-	private Question question;
+	@ManyToOne//n:1 구조 (질문1개에 답변 여러개가 달리는 구조)
+	private Question question;//질문 게시판 객체 (질문게시판의 id획득)
 }
