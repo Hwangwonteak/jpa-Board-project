@@ -16,23 +16,23 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Question {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Integer id;
+	private Integer id;//질문게시판 번호
 	
 	@Column(length = 100)
-	private String subject;
+	private String subject;//질문게시판 제목
 	
 	@Column(length = 1000)
-	private String content;
+	private String content;//질문게시판 내용
 	
-	private LocalDateTime createDate;
+	private LocalDateTime createDate;//글 등록일시
 	
-	@OneToMany(mappedBy = "question",cascade = CascadeType.REMOVE)//질문이삭제되면 그질문에 달린 답변들도 모두삭제
-	private List<Answer> answerList;
-
+	@OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+	private List<Answer> answerList;//1:n 구조
+	
 }

@@ -5,12 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hwt.hwtboard.dto.QuestionDto;
+import com.hwt.hwtboard.entity.Answer;
 import com.hwt.hwtboard.entity.Question;
 import com.hwt.hwtboard.repository.AnswerRepository;
 import com.hwt.hwtboard.repository.QuestionRepository;
+import com.hwt.hwtboard.service.AnswerService;
+import com.hwt.hwtboard.service.QuestionService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,28 +25,72 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 	
 //	@Autowired
-//	QuestionRepository questionRepository;
+//	private QuestionRepository questionRepository;
+//	
 //	@Autowired
-//	AnswerRepository answerRepository;
+//	private AnswerRepository answerRepository;
 	
-	private final QuestionRepository questionRepository;
-	private final AnswerRepository answerRepository;
+//	private final QuestionRepository questionRepository;
+//	private final AnswerRepository answerRepository;
 	
-	@RequestMapping(value = "/")
+	private final QuestionService questionService;
+	private final AnswerService answerService; 
+	
+	@RequestMapping(value = "/")	
 	public String home() {
-		return"redirect:list";
+		return "redirect:list";
 	}
 	
-	@RequestMapping(value = "/index")
+	@RequestMapping(value = "/index")	
 	public String index() {
-		return"redirect:list";
+		return "redirect:list";
 	}
 	
-	@RequestMapping(value = "/list")
+	@RequestMapping(value = "/list")	
 	public String list(Model model) {
-		List<Question> questionList=questionRepository.findAll();
-		model.addAttribute("questionList",questionList);
 		
-		return"question_list";
+//		List<Question> questionList = questionRepository.findAll();
+		
+		List<QuestionDto> questionList = questionService.getQuestionList();
+		
+		model.addAttribute("questionList", questionList);
+		
+		return "question_list";
 	}
+	
+	@RequestMapping(value = "/questionView/{id}")
+	public String questionView(Model model, @PathVariable("id") Integer id) {
+		
+		QuestionDto question = questionService.getQuestion(id);
+		
+		model.addAttribute("question", question);
+		
+		return "question_view";
+	}
+	
+	@RequestMapping(value = "/answerCreate/{id}")
+	public String answerCreate(@PathVariable("id") Integer id, @RequestParam String content) {
+		
+		answerService.answerCreate(content, id);
+				
+		return String.format("redirect:/questionView/%s", id);
+	}
+	
+
+	@RequestMapping(value = "/question_form")
+	public String questionCreate() {
+
+
+
+		return "question_form";
+	}
+
+	@RequestMapping(value = "/questionCreate")
+	public String questionCreateOk(@RequestParam String subject, @RequestParam String content) {
+
+
+
+		return "redirect:list";
+	}
+	
 }
