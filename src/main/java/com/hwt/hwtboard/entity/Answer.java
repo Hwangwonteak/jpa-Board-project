@@ -27,4 +27,7 @@ public class Answer {
 	
 	@ManyToOne//n:1 구조 (질문1개에 답변 여러개가 달리는 구조)
 	private Question question;//질문 게시판 객체 (질문게시판의 id획득)
+	
+	@ManyToOne
+	private SiteMember writer;//글쓴이
 }
